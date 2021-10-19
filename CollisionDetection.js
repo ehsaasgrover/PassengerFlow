@@ -1,7 +1,8 @@
-let circle1 = new Circles(130, 510, 20, 'red', 1, 2);
-let circle2 = new Circles(175, 510, 20, 'orange', 2, 1);
-let circle3 = new Circles(220, 510, 20, 'lightgreen', 2, 1);
-let circle4 = new Circles(265, 510, 20, 'aqua', 1, 2);
+let circle1 = new Circles(130, 500, 20, 'red', 1, 1);
+let circle2 = new Circles(175, 500, 20, 'orange', 2, 0.5);
+let circle3 = new Circles(220, 500, 20, 'lightgreen',2,1);
+let circle4 = new Circles(240, 500, 20, 'aqua',2,1);
+let circle5 = new Circles(230,400,20, 'purple',2,1);
 
 let funnelBottomLeft = new Walls(100, 500, 200, 350);
 let funnelBottomRight = new Walls(300, 350, 400, 500);
@@ -9,11 +10,14 @@ let funnelLeft = new Walls(300, 100, 300, 350);
 let funnelRight = new Walls(200, 100, 200, 350);
 let target = new Walls(180,80,320,80);
 
+let finalTarget = {x:50, y:-100};
 let dot;
-const allCircles = [circle1, circle2, circle3, circle4];
+const allCircles = [circle1, circle2, circle3, circle4, circle5];
 const allFunnelWalls = [funnelBottomLeft, funnelBottomRight, funnelLeft, funnelRight];
 
-// Getting the distance between two points [works]
+let step = goToTarget({x: finalTarget.x - circle1.x, y: finalTarget.y - circle1.y});
+
+//getting the distance between two points [works]
 function dist(x1, y1, x2, y2){
 
     let distX = x2 - x1;
@@ -60,7 +64,7 @@ function lineCircle(x1, y1, x2, y2, cx, cy, r) {
 
 }
 
-// POINT/CIRCLE [Works]
+//POINT/CIRCLE [Works]
 function pointCircle(px, py, cx, cy, r) {
     let distX;
     let distY;
@@ -110,7 +114,7 @@ function linePoint(x1, y1, x2, y2, px, py) {
     return d3 >= lineLen-buffer && d3 <= lineLen+buffer;
 }
 
-// Collision detection of innerWalls + Circles
+//collision detection of innerWalls + Circles
 function collide(array, array2, index){
 
     for(let i = 0; i<allFunnelWalls.length; i++){
@@ -139,19 +143,16 @@ function collide(array, array2, index){
 
         }
     }
+
 }
 
-// Collision Detection between circles and target
 function circleTargetCollision(allCircles, target, index) {
-    // Collision detection algorithm between circles + inner walls
+    //Collision detection algorithm between circles + inner walls
     let collision1 = lineCircle(target.x, target.y, target.x2, target.y2,
         allCircles[index].x, allCircles[index].y, allCircles[index].radius);
 
-    // Collision detection
-    if(collision1){
-        // array[index].colour = "green";
-        // allCircles[0].xSpeed = -allCircles[0].xSpeed;
-        // allCircles[0].ySpeed = -ak[index].ySpeed;
+    //Collision detection
+    if (collision1) {
         allCircles[index].colour = "#fff";
         allCircles[index].xSpeed = 0
         allCircles[index].ySpeed = 0
@@ -160,18 +161,22 @@ function circleTargetCollision(allCircles, target, index) {
     }
 }
 
-// Collision Detection between circles and outer walls
+
+
+//outerWallCollision
 function outerWallCollision() {
     for (let i = 0; i < allCircles.length; i++) {
 
         //Collision detection of RHS outerWall
         if (allCircles[i].x + allCircles[i].radius > canvas.width) {
             allCircles[i].xSpeed = -allCircles[i].xSpeed;
+
         }
 
         //Collision detection of LHS outerWall
         if(allCircles[i].x + allCircles[i].radius < allCircles[i].radius * 2){
             allCircles[i].xSpeed = -allCircles[i].xSpeed;
+
         }
 
         //Collision detection of bottom
@@ -182,24 +187,28 @@ function outerWallCollision() {
         //Collision detection of top
         if (allCircles[i].y + allCircles[i].radius <  allCircles[i].radius * 2) {
             allCircles[i].ySpeed = -allCircles[i].ySpeed;
+
         }
     }
 }
 
-// Collision Detection between circles and inner walls
+//innerWall Collision
 function innerWallCollision() {
     collide(allCircles, allFunnelWalls, 0);
     collide(allCircles, allFunnelWalls, 1);
     collide(allCircles, allFunnelWalls, 2);
     collide(allCircles, allFunnelWalls, 3);
+    collide(allCircles, allFunnelWalls, 4);
+
 
     circleTargetCollision(allCircles, target, 0);
     circleTargetCollision(allCircles, target, 1);
     circleTargetCollision(allCircles, target, 2);
     circleTargetCollision(allCircles, target, 3);
+    circleTargetCollision(allCircles, target, 4);
 }
 
-// Collision Detection between circles
+//ballCollision
 function ballCollision(){
     for(let i = 0; i<allCircles.length; i++)
     {
@@ -211,12 +220,18 @@ function ballCollision(){
 
                 allCircles[j].xSpeed = -allCircles[j].xSpeed;
                 allCircles[j].ySpeed = -allCircles[j].ySpeed;
+
             }
         }
     }
 }
 
-// Animation Loop
+function goToTarget(v) {
+    let length = (Math.sqrt(v.x * v.x + v.y * v.y));
+    return{x: v.x / length, y: v.y /length};
+}
+
+//Animation Loop
 function animate() {
     requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -225,7 +240,7 @@ function animate() {
     circle2.drawCircle();
     circle3.drawCircle();
     circle4.drawCircle();
-    // circle5.drawCircle();
+    circle5.drawCircle();
 
     funnelBottomLeft.drawWalls();
     funnelBottomRight.drawWalls();
