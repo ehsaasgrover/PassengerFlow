@@ -1,10 +1,12 @@
 class Circles {
-    constructor(x, y, radius, colour, speed) {
+    constructor(x, y, radius, colour, xSpeed, ySpeed) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.colour = colour;
-        this.speed = speed;
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
+
     }
 
     drawCircle() {
@@ -13,9 +15,19 @@ class Circles {
         c.fillStyle = this.colour;
         c.fill();
         c.closePath();
-        this.x += this.speed + 1;
-        this.y += this.speed;
 
-        // TODO: Implement circle movement within funnel only.
+        this.x += this.xSpeed;
+        this.y += this.ySpeed;
+
+        //Hardcode to get circles to move through funnel
+        // this.x += this.xSpeed;
+        // if (this.x === 240) {
+        //     this.xSpeed = 0;
+        //     this.y += -1.5;
+        // }
+
     }
+
+
+
 }
