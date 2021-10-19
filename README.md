@@ -17,4 +17,5 @@ To run the simulation in the HTML5 Canvas
 - Mridula Manderwad [(mmridulzz)](https://github.com/mmridulzz)
 - Grace Subianto [(gracesubianto)](https://github.com/gracesubianto)
 
-
+NOTE: This repository is a copy of the exclusive repository that was initially used for the Daifuku Oceania team. 
+Therefore, all of the commit history is not included in this repository. All of the team members have consistently contributed to the code implementation. 
