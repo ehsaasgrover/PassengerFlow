@@ -161,8 +161,6 @@ function circleTargetCollision(allCircles, target, index) {
     }
 }
 
-
-
 //outerWallCollision
 function outerWallCollision() {
     for (let i = 0; i < allCircles.length; i++) {
